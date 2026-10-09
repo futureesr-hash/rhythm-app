@@ -177,7 +177,7 @@ const db={
  uid(){return crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(16).slice(2)}`},
  code(data,hotelId,zone){const h=data.hotels.find(x=>x.id===hotelId);const prefix=(h?.code||'HTL').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5);const z=(zone||'GEN').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,3)||'GEN';const count=data.signs.filter(s=>s.hotelId===hotelId&&s.zone===zone).length+1;return `${prefix}-${z}-${String(count).padStart(3,'0')}`}
 };
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];let data=await db.load(),editing=null,deferredPrompt=null;
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];let data=await db.load(),editing=null;
 const instQty=s=>['تم التركيب','تم التسليم'].includes(s.status)?Number(s.quantity||1):Math.min(Number(s.quantity||1),s.inst?.installed||0);
 const instSum=()=>data.signs.filter(s=>s.hotelId===currentHotel()?.id).reduce((t,s)=>t+instQty(s),0);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')db.flush()});addEventListener('pagehide',()=>db.flush());try{navigator.storage?.persist?.()}catch{}
