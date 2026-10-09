@@ -53,6 +53,29 @@ html[data-theme=dark] #lockScr{filter:invert(1) hue-rotate(180deg)}
 @media(min-width:951px){.undobar{left:20px;right:auto;width:380px;bottom:20px}}
 .zc{border:0;cursor:pointer;font:inherit;min-height:34px}.lzd summary{cursor:pointer}
 .toast{pointer-events:none}
+/* ===== تحديث 4: البطاقات الإحصائية ===== */
+.stat{position:relative;padding:18px 18px 16px;overflow:hidden}
+.stat-ico{position:absolute;left:14px;top:14px;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:17px;line-height:1;opacity:.95}
+.stat-value{letter-spacing:-.5px}
+.stat:hover{transform:translateY(-2px);box-shadow:0 12px 28px #233d2b14;transition:transform .2s,box-shadow .2s}
+/* ===== تحديث 5: مسار المشروع ===== */
+#pipe .pipe{background:#fff;border:1px solid var(--line);border-radius:14px;transition:all .2s;position:relative;z-index:1}
+#pipe .pipe:hover{background:#fbfdf9;border-color:#cfe5b2;transform:translateX(-2px)}
+#pipe .pipe.cur{border-color:var(--green);background:linear-gradient(135deg,#f7fbf2 0%,#eef8e2 100%);box-shadow:0 4px 16px #76bc2126}
+#pipe .pipe.cur .pn{animation:pipePulse 2s infinite}
+@keyframes pipePulse{0%,100%{box-shadow:0 0 0 0 #76bc2166}50%{box-shadow:0 0 0 10px #76bc2100}}
+#pipe .pc{font-size:14px;font-weight:800;min-width:44px;text-align:left}
+/* ===== تحديث 6: التنبيهات ===== */
+.alert-row{display:flex!important;align-items:center;gap:12px;width:100%;text-align:right;padding:11px 14px;margin:8px 0;border-radius:12px;border:0;font:inherit;font-size:12.5px;line-height:1.5;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.alert-row:hover{transform:translateX(-3px);box-shadow:0 4px 12px #0000000d}
+.alert-row.l0{background:#fef2f2}
+.alert-row.l1{background:#fffbeb}
+.alert-row.l2{background:#f0fdf4}
+.alert-ico{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;flex:none;font-size:15px;color:#fff;line-height:1}
+.alert-row.l0 .alert-ico{background:linear-gradient(135deg,#ef5350,#c62828)}
+.alert-row.l1 .alert-ico{background:linear-gradient(135deg,#ffb300,#ef6c00)}
+.alert-row.l2 .alert-ico{background:linear-gradient(135deg,#8ed32a,#548d12)}
+.alert-txt{flex:1;min-width:0}
 </style>
 </head>
 <body>
@@ -101,7 +124,6 @@ function showInstallHelp(){
   document.body.appendChild(h);
   document.getElementById('iosDismiss').onclick=()=>h.remove();
 }
-/* install button in Settings */
 const installBtn=document.getElementById && document.getElementById('installAppBtn');
 if(installBtn){
   installBtn.onclick=async()=>{
@@ -183,8 +205,8 @@ const db={
         const vT = Number(v?.audit?.length||0),  lT = Number(lsFresh?.audit?.length||0);
         const vU = String(v?.updatedAt||''),     lU = String(lsFresh?.updatedAt||'');
         const vS = Number(v?.signs?.length||0),  lS = Number(lsFresh?.signs?.length||0);
-        if(vT !== lT)      chosen = vT > lT ? v : lsFresh;
-        else if(vU !== lU) chosen = vU > lU ? v : lsFresh;
+        if(vU !== lU)      chosen = vU > lU ? v : lsFresh;
+        else if(vT !== lT) chosen = vT > lT ? v : lsFresh;
         else if(vS !== lS) chosen = vS > lS ? v : lsFresh;
         else               chosen = v;
       } else {
@@ -205,11 +227,12 @@ const db={
     idb.put(KEY, d).catch(err => console.warn('IDB flush failed:', err));
   },
   write(d){
+    d.updatedAt = new Date().toISOString();
     try{ localStorage.setItem(KEY, JSON.stringify(d)); }catch{}
     if(db.mode!=='idb') return;
     db.pend = d;
     clearTimeout(db.t);
-    db.t = setTimeout(()=>db.flush(), 300);
+    db.t = setTimeout(()=>db.flush(), 50);
   },
   log(data,action,detail){
     data.audit.unshift({
@@ -253,7 +276,22 @@ function hydrate(){
   fillSelect($('#statusFilter'),statuses.map(s=>({value:s,label:s})),'كل الحالات');
 }
 function updateZones(){const h=data.hotels.find(x=>x.id===$('#formHotel').value)||currentHotel();const zones=h?.zones||[];fillSelect($('#formZone'),zones.map(z=>({value:z,label:z})),'اختر المنطقة');fillSelect($('#zoneFilter'),zones.map(z=>({value:z,label:z})),'كل المناطق')}
-function render(){hydrate();const h=currentHotel();$('#activeHotelLabel').textContent=h?.name||'لا يوجد فندق';$('#today').textContent=new Intl.DateTimeFormat('ar-EG',{dateStyle:'full'}).format(new Date());const signs=data.signs.filter(s=>!h||s.hotelId===h.id);const qty=k=>signs.filter(s=>k(s)).reduce((a,s)=>a+Number(s.quantity||1),0);const cards=[['إجمالي الكميات',qty(()=>true),'كل اليافطات'],['تم الحصر',qty(s=>s.status==='تم الحصر'),'نقاط تم توثيقها'],['قيد التصنيع',qty(s=>s.status==='قيد التصنيع'),'داخل المصنع'],['تم التركيب',instSum(),'منفذ بالموقع']];$('#stats').innerHTML=cards.map(c=>`<div class="stat"><div class="stat-label">${c[0]}</div><div class="stat-value">${c[1].toLocaleString('en-US')}</div><div class="stat-foot">${c[2]}</div></div>`).join('');$('#recentSigns').innerHTML=signs.slice().sort((a,b)=>b.createdAt.localeCompare(a.createdAt)).slice(0,5).map(card).join('')||empty('لسه مفيش يافطات مسجلة','ابدأ بإضافة أول نقطة حصر للمشروع.');renderRest()}
+function render(){
+  hydrate();const h=currentHotel();
+  $('#activeHotelLabel').textContent=h?.name||'لا يوجد فندق';
+  $('#today').textContent=new Intl.DateTimeFormat('ar-EG',{dateStyle:'full'}).format(new Date());
+  const signs=data.signs.filter(s=>!h||s.hotelId===h.id);
+  const qty=k=>signs.filter(s=>k(s)).reduce((a,s)=>a+Number(s.quantity||1),0);
+  const cards=[
+    {l:'إجمالي الكميات',v:qty(()=>true),f:'كل اليافطات',i:'🪧',c:'#eff8e6',tc:'#548d12'},
+    {l:'تم الحصر',v:qty(s=>s.status==='تم الحصر'),f:'نقاط تم توثيقها',i:'✓',c:'#e3f0ff',tc:'#1565c0'},
+    {l:'قيد التصنيع',v:qty(s=>s.status==='قيد التصنيع'),f:'داخل المصنع',i:'⚙',c:'#fff3e0',tc:'#e65100'},
+    {l:'تم التركيب',v:instSum(),f:'منفذ بالموقع',i:'⚑',c:'#e0f4f1',tc:'#00796b'}
+  ];
+  $('#stats').innerHTML=cards.map(c=>`<div class="stat"><span class="stat-ico" style="background:${c.c};color:${c.tc}">${c.i}</span><div class="stat-label">${c.l}</div><div class="stat-value">${c.v.toLocaleString('en-US')}</div><div class="stat-foot">${c.f}</div></div>`).join('');
+  $('#recentSigns').innerHTML=signs.slice().sort((a,b)=>b.createdAt.localeCompare(a.createdAt)).slice(0,5).map(card).join('')||empty('لسه مفيش يافطات مسجلة','ابدأ بإضافة أول نقطة حصر للمشروع.');
+  renderRest()
+}
 function empty(title,msg){return `<div class="empty"><b>${title}</b>${msg}</div>`}
 function card(s){const h=data.hotels.find(x=>x.id===s.hotelId);return `<article class="sign-card"><div class="sign-thumb">${s.photo?`<img class="sign-thumb" src="${s.photo}" loading="lazy" decoding="async" alt="صورة اليافطة">`:'▤'}</div><div class="sign-info"><div class="sign-top"><span class="sign-id">${esc(s.code)}</span><span class="${statusClass(s.status)}">${esc(s.status)}</span><span class="pill ${s.priority?.startsWith('A')?'critical':''}">${esc(s.priority||'C')}</span></div><div class="sign-title">${esc(s.type)} — ${esc(s.location)}</div><div class="sign-meta">${esc(s.zone)} · ${s.width||'—'} × ${s.height||'—'} سم · كمية ${s.quantity||1}</div><div class="sign-actions"><button class="small-btn" data-qr="${s.id}">QR</button><button class="small-btn" data-edit="${s.id}">تعديل</button><button class="small-btn" data-delete="${s.id}">حذف</button></div></div></article>`}
 function drawSigns(){const h=currentHotel(),q=$('#searchInput').value.toLowerCase(),zone=$('#zoneFilter').value,st=$('#statusFilter').value,pr=$('#priorityFilter').value;let list=data.signs.filter(s=>(!h||s.hotelId===h.id)&&(!q||[s.code,s.location,s.type,s.category,s.zone].some(v=>String(v||'').toLowerCase().includes(q)))&&(!zone||s.zone===zone)&&(!st||s.status===st)&&(!pr||s.priority===pr));const key=[q,zone,st,pr,h?.id].join('|');if(key!==sKey){sKey=key;sLim=40}$('#signList').innerHTML=list.length?`<div class="sign-meta" style="margin:0 2px 8px">${list.length} يافطة</div>`+list.slice(0,sLim).map(card).join('')+(list.length>sLim?`<button class="secondary" id="sMore" style="width:100%;min-height:48px">عرض المزيد (${list.length-sLim})</button>`:''):empty('مفيش نتائج مطابقة','جرّب تغيير البحث أو الفلاتر.')}
@@ -281,7 +319,8 @@ document.addEventListener('click',e=>{
   if(e.target.closest('#menuBtn'))return;
   if(e.target.closest('#tabMore'))return;
   sb.classList.remove('open');
-});$('#backupBtn').onclick=()=>{doBackup()};$('#backupReminderBtn').onclick=()=>{doBackup()};function doBackup(){(data.settings=data.settings||{}).lastBackup=new Date().toISOString();db.write(data);download('rhythm-backup-'+dateTag()+'.json',JSON.stringify(data),'application/json');setTimeout(drawStorage,500)};$('#csvBtn').onclick=()=>{const rows=[['Code','Hotel','Zone','Category','Type','Location','Width cm','Height cm','Quantity','Priority','Material','Lighting','Status','Survey Date','Notes'],...data.signs.map(s=>[s.code,data.hotels.find(h=>h.id===s.hotelId)?.name,s.zone,s.category,s.type,s.location,s.width,s.height,s.quantity,s.priority,s.material,s.lighting,s.status,s.surveyDate,s.notes])];download('rhythm-signs-'+dateTag()+'.csv','\ufeff'+rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n'),'text/csv;charset=utf-8')};$('#xlsxBtn').onclick=async()=>{const t=$('#xlsxBtn');t.textContent='جاري التجهيز...';t.disabled=true;try{if(typeof XLSX==='undefined'){await new Promise((ok,bad)=>{const sc=document.createElement('script');sc.src='https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js';sc.onload=ok;sc.onerror=()=>bad(new Error('فشل تحميل مكتبة Excel'));document.head.appendChild(sc)})}const headers=['Code','Hotel','Zone','Category','Type','Location','Width cm','Height cm','Quantity','Priority','Material','Lighting','Status','Survey Date','Notes'];const rows=[[...headers],...data.signs.map(s=>[s.code,data.hotels.find(h=>h.id===s.hotelId)?.name||'',s.zone||'',s.category||'',s.type||'',s.location||'',s.width||0,s.height||0,s.quantity||1,s.priority||'',s.material||'',s.lighting||'',s.status||'',s.surveyDate||'',s.notes||''])];const ws=XLSX.utils.aoa_to_sheet(rows);ws['!cols']=headers.map(h=>({wch:Math.max(h.length,12)}));const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'اليافطات');XLSX.writeFile(wb,'rhythm-signs-'+dateTag()+'.xlsx')}catch(e){toast(e.message||'تعذر تصدير Excel')}finally{t.textContent='تصدير Excel (.xlsx)';t.disabled=false}};$('#restoreFile').addEventListener('change',e=>{const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const incoming=JSON.parse(r.result);if(!Array.isArray(incoming.hotels)||!Array.isArray(incoming.signs))throw Error();if(confirm('سيتم استبدال كل البيانات الحالية. هل تريد المتابعة؟')){data={hotels:incoming.hotels,signs:incoming.signs,audit:incoming.audit||[],reports:incoming.reports||{},designs:incoming.designs||[],wos:incoming.wos||[],settings:incoming.settings||{},custom:incoming.custom||{cats:[],types:{}},handovers:incoming.handovers||{}};save();toast('تمت استعادة النسخة')}}catch{toast('الملف غير صالح')}};r.readAsText(file);e.target.value=''});
+});
+$('#backupBtn').onclick=()=>{doBackup()};$('#backupReminderBtn').onclick=()=>{doBackup()};function doBackup(){(data.settings=data.settings||{}).lastBackup=new Date().toISOString();db.write(data);download('rhythm-backup-'+dateTag()+'.json',JSON.stringify(data),'application/json');setTimeout(drawStorage,500)};$('#csvBtn').onclick=()=>{const rows=[['Code','Hotel','Zone','Category','Type','Location','Width cm','Height cm','Quantity','Priority','Material','Lighting','Status','Survey Date','Notes'],...data.signs.map(s=>[s.code,data.hotels.find(h=>h.id===s.hotelId)?.name,s.zone,s.category,s.type,s.location,s.width,s.height,s.quantity,s.priority,s.material,s.lighting,s.status,s.surveyDate,s.notes])];download('rhythm-signs-'+dateTag()+'.csv','\ufeff'+rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n'),'text/csv;charset=utf-8')};$('#xlsxBtn').onclick=async()=>{const t=$('#xlsxBtn');t.textContent='جاري التجهيز...';t.disabled=true;try{if(typeof XLSX==='undefined'){await new Promise((ok,bad)=>{const sc=document.createElement('script');sc.src='https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js';sc.onload=ok;sc.onerror=()=>bad(new Error('فشل تحميل مكتبة Excel'));document.head.appendChild(sc)})}const headers=['Code','Hotel','Zone','Category','Type','Location','Width cm','Height cm','Quantity','Priority','Material','Lighting','Status','Survey Date','Notes'];const rows=[[...headers],...data.signs.map(s=>[s.code,data.hotels.find(h=>h.id===s.hotelId)?.name||'',s.zone||'',s.category||'',s.type||'',s.location||'',s.width||0,s.height||0,s.quantity||1,s.priority||'',s.material||'',s.lighting||'',s.status||'',s.surveyDate||'',s.notes||''])];const ws=XLSX.utils.aoa_to_sheet(rows);ws['!cols']=headers.map(h=>({wch:Math.max(h.length,12)}));const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'اليافطات');XLSX.writeFile(wb,'rhythm-signs-'+dateTag()+'.xlsx')}catch(e){toast(e.message||'تعذر تصدير Excel')}finally{t.textContent='تصدير Excel (.xlsx)';t.disabled=false}};$('#restoreFile').addEventListener('change',e=>{const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const incoming=JSON.parse(r.result);if(!Array.isArray(incoming.hotels)||!Array.isArray(incoming.signs))throw Error();if(confirm('سيتم استبدال كل البيانات الحالية. هل تريد المتابعة؟')){data={hotels:incoming.hotels,signs:incoming.signs,audit:incoming.audit||[],reports:incoming.reports||{},designs:incoming.designs||[],wos:incoming.wos||[],settings:incoming.settings||{},custom:incoming.custom||{cats:[],types:{}},handovers:incoming.handovers||{}};save();toast('تمت استعادة النسخة')}}catch{toast('الملف غير صالح')}};r.readAsText(file);e.target.value=''});
 function dateTag(){return new Date().toISOString().slice(0,10)}function download(name,content,type){const a=document.createElement('a'),u=URL.createObjectURL(new Blob([content],{type}));a.href=u;a.download=name;a.click();URL.revokeObjectURL(u)}
 const sv={sig:''},cv=$('#sigPad'),cx=cv.getContext('2d');cx.lineWidth=3;cx.lineCap='round';cx.strokeStyle='#263238';
 function sigDraw(src){cx.clearRect(0,0,cv.width,cv.height);if(!src)return;const i=new Image();i.onload=()=>cx.drawImage(i,0,0,cv.width,cv.height);i.src=src}
@@ -422,9 +461,14 @@ const od=S.reduce((t,x)=>t+openDef(x).length,0);if(od)add(0,`${od} عيب مفت
 const qf=S.filter(x=>x.status==='ملاحظات / إصلاح'&&!x.inst?.defects?.length).length;if(qf)add(1,`${qf} يافطة مرفوضة في فحص الجودة`,'make')});
 if(data.signs.length){const lb=data.settings?.lastBackup,d=lb?days(lb):null;if(d===null||d>=7)A.push({l:d===null||d>=14?0:1,m:d===null?'لم تأخذ نسخة احتياطية بعد':`آخر نسخة احتياطية منذ ${d} يوم`,v:'reports'})}
 return A.sort((a,b)=>a.l-b.l)}
-function drawAlerts(){const el=$('#alertList');if(!el)return;const A=alCur=getAlerts(),col=['#d33','#e8a000','#76bc21'],ic=['⛔','⚠️','ℹ️'],L=alAll?A:A.slice(0,5),hi=A.filter(a=>a.l<2).length;
-$('#alertCount').textContent=A.length;$('#navBadge').textContent=hi;$('#navBadge').style.display=hi?'':'none';
-el.innerHTML=(L.map(a=>`<button class="alert-row" data-al="${A.indexOf(a)}" style="display:block;width:100%;text-align:right;padding:10px 12px;margin:6px 0;border-radius:10px;background:#f6f8f6;border:0;border-right:4px solid ${col[a.l]};font:inherit;font-size:12px">${ic[a.l]} ${esc(a.m)}</button>`).join('')||'<div class="sign-meta">لا توجد تنبيهات حالياً ✅</div>')+(A.length>5?`<button class="text-btn" id="alMore">${alAll?'إخفاء':'عرض الباقي ('+(A.length-5)+')'}</button>`:'')}
+function drawAlerts(){
+  const el=$('#alertList');if(!el)return;
+  const A=alCur=getAlerts(),ic=['⛔','⚠️','ℹ️'],L=alAll?A:A.slice(0,5),hi=A.filter(a=>a.l<2).length;
+  $('#alertCount').textContent=A.length;
+  $('#navBadge').textContent=hi;
+  $('#navBadge').style.display=hi?'':'none';
+  el.innerHTML=(L.map(a=>`<button class="alert-row l${a.l}" data-al="${A.indexOf(a)}"><span class="alert-ico">${ic[a.l]}</span><span class="alert-txt">${esc(a.m)}</span></button>`).join('')||'<div class="sign-meta" style="text-align:center;padding:20px">لا توجد تنبيهات حالياً ✅</div>')+(A.length>5?`<button class="text-btn" id="alMore" style="width:100%;padding:10px">${alAll?'إخفاء':'عرض الباقي ('+(A.length-5)+')'}</button>`:'');
+}
 document.addEventListener('click',e=>{const r=e.target.closest('.alert-row');if(e.target.id==='alMore'){alAll=!alAll;return drawAlerts()}if(!r)return;const a=alCur[+r.dataset.al];if(!a)return;if(a.hid){const sw=$('#hotelSwitch');sw.value=a.hid;sw.dispatchEvent(new Event('change'))}navigate(a.v)});
 function shareText(hid){const h=data.hotels.find(x=>x.id===hid),S=data.signs.filter(x=>x.hotelId===hid),q=a=>a.reduce((t,x)=>t+Number(x.quantity||1),0),tot=q(S),done=S.reduce((t,x)=>t+instQty(x),0),al=getAlerts().filter(a=>a.hid===hid).slice(0,5);
 return [`📋 تقرير مشروع اللافتات — ${h.name}`,`📅 ${new Date().toISOString().slice(0,10)}`,'',`• إجمالي الكميات: ${tot} (${S.length} بند)`,`• منفذ/مسلّم: ${tot?Math.round(done/tot*100):0}%`,`• أولوية حرجة: ${q(S.filter(x=>x.priority?.startsWith('A')))}`,'','المراحل:',...statuses.map(t=>[t,q(S.filter(x=>x.status===t))]).filter(a=>a[1]).map(a=>`  - ${a[0]}: ${a[1]}`),...(al.length?['','تنبيهات:',...al.map(a=>'  ⚠ '+a.m.replace(h.name+': ',''))]:[])].join('\n')}
@@ -442,9 +486,21 @@ $('#tabAdd').onclick=()=>openModal();$('#tabMore').onclick=()=>$('#sidebar').cla
 $('#stageSheet').addEventListener('click',e=>{if(e.target.closest('[data-pg]')||e.target.id==='stageSheet')$('#stageSheet').classList.remove('open')});
 document.addEventListener('click',e=>{const b=e.target.closest('.pipe');if(b)navigate(b.dataset.pg)});
 function stageOf(s){const g=SG[s.status]||1;return g===1?0:g<=3?1:g===4?2:g===5?3:g===6?(s.status==='تم التسليم'?4:3):(s.inst?.defects?.length?3:2)}
-function drawPipe(){const h=currentHotel(),el=$('#pipe');if(!h||!el)return;const S=data.signs.filter(x=>x.hotelId===h.id),q=a=>a.reduce((t,x)=>t+Number(x.quantity||1),0),tot=q(S),V=['survey','design','make','install'],N=['المعاينة الميدانية','التصميم والاعتمادات','التصنيع والجودة','التركيب'],C=['#546e7a','#1565c0','#e65100','#00796b'];
-$('#pipeSub').textContent=tot?`${h.name} · تم تسليم ${q(S.filter(x=>stageOf(x)===4))} من ${tot}`:'سجّل أول يافطة لتبدأ المتابعة';
-el.innerHTML=V.map((v,i)=>{const inq=q(S.filter(x=>stageOf(x)===i)),p=tot?Math.round(q(S.filter(x=>stageOf(x)>i))/tot*100):0;return `<button class="pipe" data-pg="${v}"><span class="pn" style="background:${C[i]}">${i+1}</span><span class="pm"><b>${N[i]}</b><small>داخل المرحلة: ${inq} · اكتمل: ${p}%</small><i class="pb"><u style="width:${p}%;background:${C[i]}"></u></i></span><span class="pc">${inq}</span></button>`}).join('')}
+function drawPipe(){
+  const h=currentHotel(),el=$('#pipe');if(!h||!el)return;
+  const S=data.signs.filter(x=>x.hotelId===h.id),q=a=>a.reduce((t,x)=>t+Number(x.quantity||1),0),tot=q(S),
+    V=['survey','design','make','install'],
+    N=['المعاينة الميدانية','التصميم والاعتمادات','التصنيع والجودة','التركيب والتسليم'],
+    C=['#546e7a','#1565c0','#e65100','#00796b'],
+    I=['✎','✦','⚙','⚑'];
+  const counts=V.map((_,i)=>q(S.filter(x=>stageOf(x)===i)));
+  const maxIdx=counts.indexOf(Math.max(...counts));
+  $('#pipeSub').textContent=tot?`${h.name} · تم تسليم ${q(S.filter(x=>stageOf(x)===4))} من ${tot}`:'سجّل أول يافطة لتبدأ المتابعة';
+  el.innerHTML=V.map((v,i)=>{
+    const inq=counts[i],p=tot?Math.round(q(S.filter(x=>stageOf(x)>i))/tot*100):0;
+    const isCur=(i===maxIdx&&inq>0);
+    return `<button class="pipe ${isCur?'cur':''}" data-pg="${v}"><span class="pn" style="background:${C[i]}">${I[i]}</span><span class="pm"><b>${N[i]}</b><small>داخل المرحلة: <b style="color:${C[i]}">${inq}</b> · اكتمل: ${p}%</small><i class="pb"><u style="width:${p}%;background:${C[i]}"></u></i></span><span class="pc" style="color:${C[i]}">${p}%</span></button>`}).join('');
+}
 function applyTheme(t){document.documentElement.dataset.theme=t;$('#themeBtn').textContent=t==='dark'?'☀\uFE0E':'☾';document.querySelector('meta[name=theme-color]')?.setAttribute('content',t==='dark'?'#101410':'#ffffff')}
 $('#themeBtn').onclick=()=>{const t=document.documentElement.dataset.theme==='dark'?'light':'dark';applyTheme(t);try{localStorage.setItem('rhythm-theme',t)}catch{}};
 applyTheme(document.documentElement.dataset.theme||'light');
