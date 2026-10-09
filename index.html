@@ -169,10 +169,9 @@ const idb={d:null,open(){return new Promise((ok,no)=>{try{const r=indexedDB.open
 const db={
  mode:'ls',pend:null,t:0,
  async load(){let ls=null;try{ls=JSON.parse(localStorage.getItem(KEY))}catch{}
-  try{idb.d=await idb.open();db.mode='idb';const v=await idb.get(KEY);if(v)return v;
-   if(ls){await idb.put(KEY,ls);if(await idb.get(KEY))localStorage.removeItem(KEY);return ls}return structuredClone(starter)}
+  try{idb.d=await idb.open();db.mode='idb';const v=await idb.get(KEY);const lsFresh=ls?JSON.parse(JSON.stringify(ls)):null;if(v&&(!lsFresh||Number(v?.audit?.length||0)>=Number(lsFresh?.audit?.length||0)))return v;if(lsFresh){await idb.put(KEY,lsFresh);return lsFresh}return v||structuredClone(starter)}
   catch{db.mode='ls';return ls||structuredClone(starter)}},
- async flush(){const d=db.pend;if(!d)return;db.pend=null;try{await idb.put(KEY,d);if(navigator.storage?.estimate){navigator.storage.estimate().then(e=>{if(e.usage&&e.quota&&e.usage/e.quota>.8&&!window.__spaceWarned){window.__spaceWarned=1;toast('تنبيه: استهلكت 80% من مساحة التخزين — خُد نسخة احتياطية واحذف الصور القديمة')}})}}catch{db.pend=db.pend||d;toast('تعذّر الحفظ — المساحة ممتلئة، خُد نسخة احتياطية الآن')}},
+ async flush(){const d=db.pend;if(!d)return;db.pend=null;try{try{localStorage.setItem(KEY,JSON.stringify(d))}catch{};await idb.put(KEY,d);if(navigator.storage?.estimate){navigator.storage.estimate().then(e=>{if(e.usage&&e.quota&&e.usage/e.quota>.8&&!window.__spaceWarned){window.__spaceWarned=1;toast('تنبيه: استهلكت 80% من مساحة التخزين — خُد نسخة احتياطية واحذف الصور القديمة')}})}}catch{db.pend=db.pend||d;toast('تعذّر الحفظ — المساحة ممتلئة، خُد نسخة احتياطية الآن')}},
  write(d){if(db.mode!=='idb'){localStorage.setItem(KEY,JSON.stringify(d));return}db.pend=d;clearTimeout(db.t);db.t=setTimeout(db.flush,300)},
  log(data,action,detail){data.audit.unshift({id:crypto.randomUUID?.()||String(Date.now()),action,detail,at:new Date().toISOString()});data.audit=data.audit.slice(0,500)},
  uid(){return crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(16).slice(2)}`},
