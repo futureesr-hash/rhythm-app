@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'rhythm-v5.3.0';
+const CACHE_VERSION = 'rhythm-v5.4.0';
 const CORE_ASSETS = ['./', './index.html', './manifest.json'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE_VERSION).then(c => Promise.allSettled(CORE_ASSETS.map(u => c.add(u).catch(() => null)))).then(() => self.skipWaiting()));
