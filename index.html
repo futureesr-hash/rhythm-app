@@ -76,6 +76,116 @@ html[data-theme=dark] #lockScr{filter:invert(1) hue-rotate(180deg)}
 .alert-row.l1 .alert-ico{background:linear-gradient(135deg,#ffb300,#ef6c00)}
 .alert-row.l2 .alert-ico{background:linear-gradient(135deg,#8ed32a,#548d12)}
 .alert-txt{flex:1;min-width:0}
+/* ===== تحديث 13: النموذج خطوة بخطوة ===== */
+.sbar{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:0 0 16px;padding:6px;background:#f4f7f3;border-radius:12px}
+.sbtn{display:grid;justify-items:center;gap:2px;padding:10px 6px;border-radius:9px;background:transparent;color:#7a8781;font:inherit;font-size:11px;font-weight:700;transition:all .2s;cursor:pointer}
+.sbtn b{width:24px;height:24px;border-radius:50%;background:#e0e6e1;color:#7a8781;display:grid;place-items:center;font-size:12px;transition:all .2s}
+.sbtn.on{background:#fff;color:#3d6b0c;box-shadow:0 2px 8px #233d2b0d}
+.sbtn.on b{background:#76bc21;color:#fff}
+.sbtn.done b{background:#76bc21;color:#fff}
+.spnl{display:none;animation:spnlIn .25s ease-out}
+.spnl.on{display:block}
+@keyframes spnlIn{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:translateX(0)}}
+.snav{display:flex;gap:8px;margin:14px 0 0}
+.snav .secondary,.snav .primary{flex:1;min-height:46px}
+.snav .secondary:disabled{opacity:.4}
+.spv{display:flex;align-items:center;gap:12px;padding:10px 12px;margin:0 0 14px;background:linear-gradient(135deg,#f7fbf2,#eef8e2);border:1px solid #cfe5b2;border-radius:12px}
+.spv-img{width:46px;height:46px;border-radius:9px;background:#fff;display:grid;place-items:center;color:#9aaa9f;font-size:20px;overflow:hidden;flex:none;border:1px solid #e5ebe7}
+.spv-img img{width:100%;height:100%;object-fit:cover}
+.spv-info{flex:1;min-width:0}
+.spv-info b{display:block;font-size:13px;color:#34520f;letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:800}
+.spv-info small{display:block;font-size:11px;color:#617066;margin-top:2px}
+.spv .pill{flex:none}
+@media(max-width:650px){.sbtn span{font-size:10px}.sbtn b{width:22px;height:22px;font-size:11px}}
+/* ===== تحديث 7: Bottom Sheet بمقبض سحب ===== */
+#stageSheet .modal{position:relative;padding-top:26px;max-height:80vh}
+#stageSheet .modal::before{content:'';position:absolute;top:10px;left:50%;transform:translateX(-50%);width:44px;height:5px;border-radius:3px;background:#cbd5ce}
+#stageSheet .modal{animation:sheetUp .3s cubic-bezier(.2,.9,.3,1)}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+#stageSheet .modal.sh{transform:translateY(var(--sh,0));transition:transform .25s ease-out}
+#stageSheet .modal.closing{transform:translateY(100%);transition:transform .25s ease-in}
+#stageSheet h2{text-align:center;font-size:16px;margin-bottom:14px!important}
+#stageSheet .pipe{margin:6px 0}
+/* ===== تحديث 8: مؤشر التبويب النشط ===== */
+.tabs button{position:relative;transition:color .2s,background .2s}
+.tabs button::after{content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%) scale(0);width:5px;height:5px;border-radius:50%;background:#76bc21;transition:transform .25s cubic-bezier(.2,.9,.3,1.4)}
+.tabs button.on::after{transform:translateX(-50%) scale(1)}
+.tabs button.on span{font-weight:700}
+.tabs button:active{transform:scale(.94);transition:transform .1s}
+.tabs .tab-add:active{transform:scale(.92) translateY(-2px)}
+.tabs .tab-add{transition:transform .15s,box-shadow .15s}
+.tabs .tab-add:hover{box-shadow:0 6px 16px #76bc2140}
+/* ===== تحديث 9: تأثيرات اللمس العامة ===== */
+button:active:not([disabled]),.small-btn:active,.primary:active,.secondary:active{transform:scale(.97);transition:transform .1s}
+.pipe:active{transform:scale(.985)}
+.sign-card:active,.panel:active{background:#fafcf9;transition:background .1s}
+.nav-link:active{background:#eff8e6;transition:background .1s}
+.rm:active{transform:scale(.9)}
+.zone-chip:active{transform:scale(.94)}
+.file-btn:active{transform:scale(.97)}
+.alert-row:active{transform:scale(.985)}
+input,select,textarea{-webkit-tap-highlight-color:transparent}
+button,.sign-card,.panel{-webkit-tap-highlight-color:transparent;user-select:none}
+/* ===== تحديث 2: تدرّجات ===== */
+.primary{background:linear-gradient(135deg,#8ed32a 0%,#548d12 100%);box-shadow:0 2px 8px #76bc2126}
+.primary:hover{background:linear-gradient(135deg,#76bc21 0%,#3d6b0c 100%);box-shadow:0 4px 14px #76bc2138}
+.brand-mark{background:linear-gradient(135deg,#8ed32a 0%,#548d12 100%);box-shadow:0 4px 14px #76bc2126}
+.tabs .tab-add{background:linear-gradient(135deg,#8ed32a 0%,#548d12 100%)}
+.nav-link.active{background:linear-gradient(135deg,#f7fbf2 0%,#eef8e2 100%)}
+.stat:nth-child(1):before{background:linear-gradient(180deg,#8ed32a,#548d12)}
+.stat:nth-child(2):before{background:linear-gradient(180deg,#42a5f5,#1565c0)}
+.stat:nth-child(3):before{background:linear-gradient(180deg,#ffa726,#e65100)}
+.stat:nth-child(4):before{background:linear-gradient(180deg,#26a69a,#00796b)}
+/* ===== تحديث 3: حواف أكثر استدارة ===== */
+.primary,.secondary,.text-btn,.file-btn,.small-btn{border-radius:14px}
+.sign-card,.panel{border-radius:20px}
+.modal{border-radius:24px}
+.stat{border-radius:20px}
+input,select,textarea{border-radius:12px}
+.nav-link{border-radius:14px}
+.pipe{border-radius:16px}
+.filters{border-radius:16px}
+.rm{border-radius:14px}
+.sbtn{border-radius:11px}
+.tabs button{border-radius:12px}
+.toast{border-radius:18px}
+.arow>*{border-radius:14px}
+.zone-chip{border-radius:20px}
+/* ===== تحديث 19: انتقالات النوافذ ===== */
+.modal-backdrop.open{animation:bdFade .22s ease-out}
+@keyframes bdFade{from{opacity:0}to{opacity:1}}
+.modal-backdrop.open .modal{animation:mdlUp .3s cubic-bezier(.2,.9,.3,1.05)}
+@keyframes mdlUp{from{opacity:0;transform:translateY(22px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+/* ===== تحديث 20: Toast محسّن ===== */
+.toast{
+  display:flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,#2f4235 0%,#1a2820 100%);
+  color:#fff;padding:13px 18px 13px 14px;
+  font-size:12.5px;font-weight:600;line-height:1.4;
+  box-shadow:0 10px 28px #0000004d,inset 0 0 0 1px #ffffff0f;
+  opacity:0;transform:translateY(16px) scale(.94);
+  transition:opacity .25s,transform .32s cubic-bezier(.2,.9,.3,1.15);
+  min-height:50px;overflow:hidden;z-index:50;
+}
+.toast.show{opacity:1;transform:translateY(0) scale(1)}
+.toast::before{
+  content:'✓';width:28px;height:28px;flex:none;border-radius:50%;
+  background:linear-gradient(135deg,#8ed32a,#548d12);
+  display:grid;place-items:center;font-size:14px;color:#fff;font-weight:800;
+  box-shadow:0 2px 8px #76bc2140;
+}
+.toast.err::before{content:'!';background:linear-gradient(135deg,#ef5350,#c62828);box-shadow:0 2px 8px #ef535040}
+.toast::after{
+  content:'';position:absolute;bottom:0;left:0;height:3px;
+  background:linear-gradient(90deg,#8ed32a,#76bc21);
+  animation:toastBar 3s linear forwards;
+}
+.toast.err::after{background:linear-gradient(90deg,#ef5350,#c62828)}
+@keyframes toastBar{from{width:100%}to{width:0}}
+@media(max-width:950px){
+  .toast{left:12px;right:12px;bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+  body.has-pill .toast{bottom:calc(228px + env(safe-area-inset-bottom,0px))}
+}
 </style>
 </head>
 <body>
@@ -97,8 +207,67 @@ html[data-theme=dark] #lockScr{filter:invert(1) hue-rotate(180deg)}
 <section class="view" id="view-hotels"><div class="section-head"><div><h1>الفنادق والمناطق</h1><p>أنشئ مساحات العمل وحدد مناطق كل فندق.</p></div></div><div class="two-col"><div class="panel"><h2>إضافة فندق</h2><form id="hotelForm"><label>اسم الفندق<input name="name" required placeholder="مثال: Rixos Sharm"></label><label>كود الفندق<input name="code" required maxlength="6" placeholder="RIXSH"></label><label>تاريخ الافتتاح المستهدف<input name="opening" type="date"></label><button class="primary" type="submit">حفظ الفندق</button></form></div><div class="panel"><h2>إدارة المناطق</h2><form id="zoneForm"><label>الفندق<select name="hotelId" id="zoneHotel"></select></label><label>اسم المنطقة<input name="name" required placeholder="مثال: Main Lobby"></label><button class="primary" type="submit">إضافة منطقة</button></form><div id="hotelList" class="hotel-list"></div></div></div></section>
 <section class="view" id="view-reports"><div class="section-head"><div><h1>التقارير والنسخ الاحتياطي</h1><p>احتفظ بنسخة من بياناتك أو صدّر سجل اليافطات.</p></div></div><div class="report-cards"><div class="panel"><div class="report-icon">⇩</div><h2>نسخة احتياطية كاملة</h2><p>تصدير الفنادق والمناطق واليافطات وسجل التغييرات بصيغة JSON.</p><button class="primary" id="backupBtn">تنزيل نسخة JSON</button></div><div class="panel"><div class="report-icon">▦</div><h2>تصدير سجل اليافطات</h2><p>تنزيل البيانات الأساسية بصيغة CSV لفتحها في Excel.</p><button class="secondary" id="csvBtn">تصدير CSV</button> <button class="secondary" id="xlsxBtn">تصدير Excel (.xlsx)</button></div><div class="panel"><div class="report-icon">⇧</div><h2>استعادة نسخة</h2><p>استيراد نسخة JSON محفوظة سابقًا. سيتم استبدال البيانات الحالية.</p><label class="file-btn">اختيار ملف JSON<input type="file" id="restoreFile" accept="application/json"></label></div></div><div class="panel"><h2>مساحة التخزين</h2><div id="stInfo" class="sign-meta"></div><div style="height:8px;background:#e8eee9;border-radius:6px;margin:8px 0"><div id="stBar" style="height:8px;background:#76bc21;border-radius:6px;width:0"></div></div><p>البيانات والصور بتتخزن على الجهاز نفسه. خُد نسخة احتياطية JSON بانتظام.</p><div id="backupReminder" class="lockbar" style="display:none;margin-top:12px"><span id="backupReminderTxt"></span><button class="small-btn" id="backupReminderBtn">نسخ الآن</button></div></div><div class="panel"><div class="report-icon">▤</div><h2>تقرير الفندق الشامل (PDF)</h2><p>تقرير منسّق لكل فندق: الملخص، التوزيع، سجل اليافطات بالصور، التصميم، التصنيع، التركيب والتسليم.</p><label>الفندق<select id="rpHotel"></select></label><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="rpPhotos" checked style="width:auto"> تضمين الصور</label><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="primary" id="rpOpen">معاينة وحفظ PDF</button><button class="secondary" id="rpShare">مشاركة ملخص على واتساب</button></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="primary" id="rpWaPdf" style="background:#25d366;color:#fff">إرسال PDF على واتساب</button><button class="secondary" id="rpDl">تنزيل PDF</button></div></div></section><section class="view" id="view-settings"><div class="section-head"><div><h1>الإعدادات</h1><p>إعدادات التطبيق والبيانات.</p></div></div><div class="panel"><h2>🔒 قفل التطبيق</h2><p id="pinInfo" class="sign-meta"></p><p>رقم سري يُطلب عند فتح التطبيق، وبعد دقيقة من تركه في الخلفية. هذا قفل للواجهة وليس تشفيراً للبيانات.</p><div class="arow"><button class="primary" id="pinSet">تفعيل / تغيير الرقم</button><button class="small-btn" id="pinOff">إيقاف القفل</button></div></div><div class="panel"><h2>📲 تثبيت التطبيق</h2><p class="sign-meta">ثبّت التطبيق على شاشتك الرئيسية لفتحه كتطبيق كامل بشكل أسرع (يعمل دون اتصال).</p><div class="arow"><button class="primary" id="installAppBtn">⬇ تثبيت التطبيق</button><button class="secondary" id="installHelpBtn">كيف أثبّت؟</button></div></div><div class="panel"><h2>رقم واتساب المصنع</h2><p>اختياري: لو كتبته، زر «إرسال على واتساب» في أمر التشغيل هيفتح المحادثة معاه مباشرة. اكتبه بصيغة دولية بدون + (مثال: 201001234567).</p><input id="waNum" inputmode="numeric" placeholder="201001234567"><button class="secondary" id="saveWa" style="margin-top:8px">حفظ الرقم</button></div><div class="panel"><h2>رابط التطبيق للـ QR</h2><p>اختياري: لو كتبت رابط التطبيق، الـQR هيفتح اليافطة داخل التطبيق. لو تركته فاضي، الـQR هيحمل بيانات اليافطة كنص.</p><input id="appLink" placeholder="https://..."><button class="secondary" id="saveLink" style="margin-top:8px">حفظ الرابط</button></div><div class="panel"><h2>⚙️ الإعدادات</h2></div><div class="panel"><h2>🏢 بيانات الشركة</h2><p class="sign-meta">اسم الشركة والشعار يظهران في التقارير المصدّرة.</p><label>اسم الشركة<input id="compName" placeholder="Rhythm Integrated Solutions"></label><label style="margin-top:10px">شعار الشركة (اختياري)<div class="file-btn" style="margin-top:6px">رفع الشعار<input type="file" id="compLogo" accept="image/*"></div></label><div id="compLogoPrev" style="margin-top:8px"></div></div><div class="panel"><h2>📏 وحدة القياس</h2><label>وحدة الأبعاد في المقاسات</label><select id="unitSelect"><option value="cm">سم (cm)</option><option value="inch">بوصة (inch)</option></select></div><div class="panel warning"><b>ملاحظة:</b> هذه النسخة تحفظ البيانات على نفس المتصفح والجهاز. الاستخدام الجماعي بين عدة أجهزة يحتاج إلى قاعدة بيانات سحابية وتسجيل دخول في مرحلة لاحقة.</div></section>
 </main></div>
-<div class="modal-backdrop" id="signModal"><section class="modal"><div class="modal-head"><div><h2 id="modalTitle">تسجيل يافطة جديدة</h2><small>أدخل بيانات نقطة اللافتة</small></div><button class="close" id="closeModal">×</button></div><form id="signForm"><input type="hidden" name="id"><div style="display:none"><label>الفندق<select name="hotelId" id="formHotel" required></select></label></div><details class="fsec" open><summary>الأساسي</summary><div class="form-grid"><label>المنطقة<select name="zone" id="formZone" required></select></label><label class="wide">التصنيف الرئيسي<select name="category" id="formCat" required></select><input id="newCat" placeholder="اسم التصنيف الجديد" style="display:none;margin-top:6px"></label><label class="wide">النوع الفرعي<select name="type" id="formType" required></select><input id="newType" placeholder="اسم النوع الجديد" style="display:none;margin-top:6px"></label><label class="wide">الموقع التفصيلي<input name="location" required placeholder="مثال: مدخل المطعم الرئيسي"></label></div></details><details class="fsec" id="bulkSec"><summary>⚡ إضافة بالجملة (ترقيم الغرف)</summary><label style="display:flex;gap:8px;align-items:center;margin:8px 0"><input type="checkbox" id="bulkOn" style="width:auto"> إنشاء يافطة مستقلة لكل رقم</label><div id="bulkBox" style="display:none"><div class="form-grid"><label>بادئة الموقع<input id="bkPrefix" value="غرفة "></label><label>من رقم<input id="bkFrom" type="number" inputmode="numeric" placeholder="101"></label><label>إلى رقم<input id="bkTo" type="number" inputmode="numeric" placeholder="140"></label><label>أرقام مستبعدة<input id="bkSkip" placeholder="مثال: 113, 213"></label></div><div class="sign-meta" id="bkInfo"></div><div class="sign-meta">بتاخد نفس بيانات النموذج، والكمية 1 لكل واحدة، والصورة الأولى للأولى بس.</div></div></details><details class="fsec" open><summary>المقاس والكمية والخامة</summary><div class="form-grid"><label>العرض (سم)<input name="width" type="number" min="0" step="0.1"></label><label>الارتفاع (سم)<input name="height" type="number" min="0" step="0.1"></label><label>الكمية<input name="quantity" type="number" min="1" value="1" required></label><label>الأولوية<select name="priority"><option>A - حرجة</option><option>B - عالية</option><option selected>C - متوسطة</option><option>D - منخفضة</option></select></label><label>الخامة<input name="material" placeholder="Acrylic / Stainless Steel / Wood"></label><label>الإضاءة<select name="lighting"><option>بدون إضاءة</option><option>Front-lit</option><option>Back-lit</option><option>Internal LED</option><option>Existing Power</option></select></label></div></details><details class="fsec"><summary>الصور</summary><div class="form-grid"><label class="wide">صورة المعاينة / الوضع الحالي<input name="photo" type="file" accept="image/*"></label><label class="wide">صورة بعد التنفيذ<input name="afterPhoto" type="file" accept="image/*"></label><label class="wide">صورة مشكلة / ملاحظة<input name="issuePhoto" type="file" accept="image/*"></label></div></details><details class="fsec"><summary>الحالة والملاحظات والموقع</summary><div class="form-grid"><label>مرحلة التنفيذ<select name="status" id="formStatus"></select></label><label>تاريخ المعاينة<input name="surveyDate" type="date"></label><label class="wide">ملاحظات<textarea name="notes" rows="3"></textarea></label><label class="wide">موقع المعاينة (GPS)<div style="display:flex;gap:8px;align-items:center"><input name="latitude" id="gpsLat" placeholder="خط العرض" readonly><input name="longitude" id="gpsLng" placeholder="خط الطول" readonly><button type="button" class="secondary" id="gpsBtn" style="white-space:nowrap">تحديد موقعي</button></div></label></div></details><div class="modal-actions"><button type="button" class="secondary" id="cancelModal">إلغاء</button><button type="submit" class="primary">حفظ البيانات</button></div></form></section></div>
-<nav class="tabs" id="tabs"><button data-t="dashboard" class="on">◉<span>الرئيسية</span></button><button data-t="signs">▤<span>اليافطات</span></button><button class="tab-add" id="tabAdd" aria-label="إضافة يافطة">+</button><button data-t="stages">⚑<span>المراحل</span></button><button id="tabMore">☰<span>المزيد</span></button></nav>
+<div class="modal-backdrop" id="signModal"><section class="modal"><div class="modal-head"><div><h2 id="modalTitle">تسجيل يافطة جديدة</h2><small>أدخل بيانات نقطة اللافتة</small></div><button class="close" id="closeModal">×</button></div><form id="signForm"><input type="hidden" name="id">
+<div style="display:none"><label>الفندق<select name="hotelId" id="formHotel" required></select></label></div>
+
+<div class="spv" id="spv">
+  <div class="spv-img" id="spvImg">▤</div>
+  <div class="spv-info">
+    <b id="spvCode">—</b>
+    <small id="spvLine">— × — سم · كمية 1</small>
+  </div>
+  <span class="pill" id="spvPr">C</span>
+</div>
+
+<div class="sbar" id="sbar">
+  <button type="button" class="sbtn on" data-s="1"><b>1</b><span>الأساسي</span></button>
+  <button type="button" class="sbtn" data-s="2"><b>2</b><span>القياسات</span></button>
+  <button type="button" class="sbtn" data-s="3"><b>3</b><span>الصور والحالة</span></button>
+</div>
+
+<div class="spnl on" data-s="1">
+  <div class="form-grid">
+    <label>المنطقة<select name="zone" id="formZone" required></select></label>
+    <label class="wide">التصنيف الرئيسي<select name="category" id="formCat" required></select><input id="newCat" placeholder="اسم التصنيف الجديد" style="display:none;margin-top:6px"></label>
+    <label class="wide">النوع الفرعي<select name="type" id="formType" required></select><input id="newType" placeholder="اسم النوع الجديد" style="display:none;margin-top:6px"></label>
+    <label class="wide">الموقع التفصيلي<input name="location" required placeholder="مثال: مدخل المطعم الرئيسي"></label>
+  </div>
+  <details class="fsec" id="bulkSec"><summary>⚡ إضافة بالجملة (ترقيم الغرف)</summary><label style="display:flex;gap:8px;align-items:center;margin:8px 0"><input type="checkbox" id="bulkOn" style="width:auto"> إنشاء يافطة مستقلة لكل رقم</label><div id="bulkBox" style="display:none"><div class="form-grid"><label>بادئة الموقع<input id="bkPrefix" value="غرفة "></label><label>من رقم<input id="bkFrom" type="number" inputmode="numeric" placeholder="101"></label><label>إلى رقم<input id="bkTo" type="number" inputmode="numeric" placeholder="140"></label><label>أرقام مستبعدة<input id="bkSkip" placeholder="مثال: 113, 213"></label></div><div class="sign-meta" id="bkInfo"></div><div class="sign-meta">بتاخد نفس بيانات النموذج، والكمية 1 لكل واحدة، والصورة الأولى للأولى بس.</div></div></details>
+</div>
+
+<div class="spnl" data-s="2">
+  <div class="form-grid">
+    <label>العرض (سم)<input name="width" type="number" min="0" step="0.1"></label>
+    <label>الارتفاع (سم)<input name="height" type="number" min="0" step="0.1"></label>
+    <label>الكمية<input name="quantity" type="number" min="1" value="1" required></label>
+    <label>الأولوية<select name="priority"><option>A - حرجة</option><option>B - عالية</option><option selected>C - متوسطة</option><option>D - منخفضة</option></select></label>
+    <label>الخامة<input name="material" placeholder="Acrylic / Stainless Steel / Wood"></label>
+    <label>الإضاءة<select name="lighting"><option>بدون إضاءة</option><option>Front-lit</option><option>Back-lit</option><option>Internal LED</option><option>Existing Power</option></select></label>
+  </div>
+</div>
+
+<div class="spnl" data-s="3">
+  <details class="fsec" open><summary>الصور</summary><div class="form-grid"><label class="wide">صورة المعاينة / الوضع الحالي<input name="photo" type="file" accept="image/*"></label><label class="wide">صورة بعد التنفيذ<input name="afterPhoto" type="file" accept="image/*"></label><label class="wide">صورة مشكلة / ملاحظة<input name="issuePhoto" type="file" accept="image/*"></label></div></details>
+  <details class="fsec" open><summary>الحالة والملاحظات والموقع</summary><div class="form-grid"><label>مرحلة التنفيذ<select name="status" id="formStatus"></select></label><label>تاريخ المعاينة<input name="surveyDate" type="date"></label><label class="wide">ملاحظات<textarea name="notes" rows="3"></textarea></label><label class="wide">موقع المعاينة (GPS)<div style="display:flex;gap:8px;align-items:center"><input name="latitude" id="gpsLat" placeholder="خط العرض" readonly><input name="longitude" id="gpsLng" placeholder="خط الطول" readonly><button type="button" class="secondary" id="gpsBtn" style="white-space:nowrap">تحديد موقعي</button></div></label></div></details>
+</div>
+
+<div class="snav" id="snav">
+  <button type="button" class="secondary" id="sPrev">← السابق</button>
+  <button type="button" class="primary" id="sNext">التالي →</button>
+</div>
+
+<div class="modal-actions">
+  <button type="button" class="secondary" id="cancelModal">إلغاء</button>
+  <button type="submit" class="primary" id="sSubmit">حفظ البيانات</button>
+</div>
+</form></section></div>
+<nav class="tabs" id="tabs">
+  <button data-t="dashboard" class="on" aria-label="الرئيسية">◉<span>الرئيسية</span></button>
+  <button data-t="signs" aria-label="اليافطات">▤<span>اليافطات</span></button>
+  <button class="tab-add" id="tabAdd" aria-label="إضافة يافطة">+</button>
+  <button data-t="stages" aria-label="المراحل">⚑<span>المراحل</span></button>
+  <button id="tabMore" aria-label="المزيد">☰<span>المزيد</span></button>
+</nav>
 <div class="modal-backdrop" id="stageSheet" style="align-items:flex-end;padding:0"><section class="modal" style="border-radius:16px 16px 0 0;width:100%"><h2 style="margin:0 0 6px">مراحل العمل</h2><button class="pipe" data-pg="survey"><span class="pn" style="background:#546e7a">1</span><span class="pm"><b>المعاينة الميدانية</b></span></button><button class="pipe" data-pg="design"><span class="pn" style="background:#1565c0">2</span><span class="pm"><b>التصميم والاعتمادات</b></span></button><button class="pipe" data-pg="make"><span class="pn" style="background:#e65100">3</span><span class="pm"><b>التصنيع والجودة</b></span></button><button class="pipe" data-pg="install"><span class="pn" style="background:#00796b">4</span><span class="pm"><b>التركيب والتسليم</b></span></button></section></div>
 <div id="coachPill" class="cpill"></div><div class="modal-backdrop" id="welcome"><section class="modal" style="text-align:center"><h2>مرحباً بك 👋</h2><p>هنمشّيك على الخطوات الصح خطوة بخطوة، وفي كل خطوة هتلاقي <b>إشارة حمرا</b> بتنبض على الزر اللي تضغط عليه.</p><ol class="gl wl"><li><b>1</b><span><strong>أضف فندقك</strong></span></li><li><b>2</b><span><strong>سجّل اليافطات وصورها</strong></span></li><li><b>3</b><span><strong>المعاينة ← التصميم ← التصنيع ← التركيب</strong></span></li><li><b>4</b><span><strong>خُد نسخة احتياطية</strong></span></li></ol><button class="primary" id="wStart" style="width:100%;margin-top:14px;min-height:48px">ابدأ الآن</button><button class="secondary" id="wSkip" style="width:100%;margin-top:8px;min-height:44px">تخطي — أجرّب بالفندق التجريبي</button></section></div><div id="lb"><img id="lbImg" alt=""></div><div class="modal-backdrop" id="qrModal"><section class="modal" style="text-align:center"><div id="qrBig" style="width:240px;margin:0 auto"></div><b id="qrCode"></b><div class="sign-meta" id="qrInfo"></div><div class="modal-actions"><button class="secondary" id="qrClose">إغلاق</button><button class="primary" id="qrPrint">طباعة الملصق</button></div></section></div><div class="modal-backdrop" id="rpOv" style="align-items:flex-start;padding:0;overflow:auto"><div style="background:#fff;width:100%;min-height:100%"><div class="no-print" style="position:sticky;top:0;z-index:2;display:flex;gap:8px;padding:10px;background:#fff;border-bottom:1px solid var(--line)"><button class="primary" id="rpPrint">حفظ PDF / طباعة</button><button class="primary" id="rpWaPdf2" style="background:#25d366;color:#fff">PDF واتساب</button><button class="secondary" id="rpShare2">ملخص</button><button class="secondary" id="rpClose">إغلاق</button></div><div id="rpBody" style="padding:12px"></div></div></div><div class="modal-backdrop" id="pdfReady"><section class="modal" style="text-align:center"><h2>✅ ملف التقرير جاهز</h2><p id="pdfInfo" class="sign-meta"></p><button class="primary" id="pdfSend" style="background:#25d366;color:#fff;width:100%;min-height:48px">إرسال على واتساب</button><button class="secondary" id="pdfSave" style="width:100%;margin-top:8px;min-height:44px">حفظ على الجهاز</button><button class="text-btn" id="pdfClose" style="width:100%;margin-top:6px">إغلاق</button></section></div><div class="modal-backdrop" id="askBox"><section class="modal"><h2 id="askT" style="font-size:16px"></h2><input id="askV" style="width:100%;margin:10px 0;min-height:46px"><div class="arow"><button class="primary" id="askOk">حفظ</button><button class="small-btn" id="askNo">إلغاء</button><button class="small-btn" id="askDel" style="color:#b3261e">حذف</button></div></section></div>
 <div id="undoBar" class="undobar"></div>
@@ -259,7 +428,18 @@ const instSum=()=>data.signs.filter(s=>s.hotelId===currentHotel()?.id).reduce((t
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')db.flush()});addEventListener('pagehide',()=>db.flush());try{navigator.storage?.persist?.()}catch{}
 const statuses=['مسودة','تم الحصر','مطلوب تصميم','التصميم قيد العمل','مرسل للاعتماد','معتمد','قيد التصنيع','فحص الجودة','جاهز للتركيب','قيد التركيب','تم التركيب','ملاحظات / إصلاح','تم التسليم'];
 const SG={'مسودة':1,'تم الحصر':1,'مطلوب تصميم':2,'التصميم قيد العمل':2,'مرسل للاعتماد':2,'معتمد':3,'قيد التصنيع':4,'فحص الجودة':4,'جاهز للتركيب':5,'قيد التركيب':5,'تم التركيب':6,'تم التسليم':6,'ملاحظات / إصلاح':7};const statusClass=s=>'pill s'+(SG[s]||1);
-function save(){db.write(data);render()};function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+function save(){db.write(data);render()};
+function toast(m,type){
+  const t=$('#toast');
+  const isErr=type==='err'||/تعذر|فشل|غير|خطأ|مفيش|ممنوع|احذف|أصلح|أكمل|تأكد/i.test(m);
+  t.textContent=m;
+  t.classList.toggle('err',isErr);
+  t.classList.remove('show');
+  void t.offsetWidth;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t=setTimeout(()=>t.classList.remove('show'),3000);
+}
 function currentHotel(){return data.hotels.find(h=>h.id===$('#hotelSwitch').value)||data.hotels[0]}
 function fillSelect(el,items,placeholder=''){if(!el)return;const old=el.value;el.innerHTML=(placeholder?`<option value="">${placeholder}</option>`:'')+items.map(x=>`<option value="${esc(x.value)}">${esc(x.label)}</option>`).join('');if(items.some(x=>x.value===old))el.value=old}
 function esc(v=''){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -297,8 +477,59 @@ function card(s){const h=data.hotels.find(x=>x.id===s.hotelId);return `<article 
 function drawSigns(){const h=currentHotel(),q=$('#searchInput').value.toLowerCase(),zone=$('#zoneFilter').value,st=$('#statusFilter').value,pr=$('#priorityFilter').value;let list=data.signs.filter(s=>(!h||s.hotelId===h.id)&&(!q||[s.code,s.location,s.type,s.category,s.zone].some(v=>String(v||'').toLowerCase().includes(q)))&&(!zone||s.zone===zone)&&(!st||s.status===st)&&(!pr||s.priority===pr));const key=[q,zone,st,pr,h?.id].join('|');if(key!==sKey){sKey=key;sLim=40}$('#signList').innerHTML=list.length?`<div class="sign-meta" style="margin:0 2px 8px">${list.length} يافطة</div>`+list.slice(0,sLim).map(card).join('')+(list.length>sLim?`<button class="secondary" id="sMore" style="width:100%;min-height:48px">عرض المزيد (${list.length-sLim})</button>`:''):empty('مفيش نتائج مطابقة','جرّب تغيير البحث أو الفلاتر.')}
 function drawHotels(){$('#hotelList').innerHTML=data.hotels.map(h=>`<div class="hotel-item"><div style="flex:1"><b>${esc(h.name)}</b><small>كود: ${esc(h.code)} · ${data.signs.filter(s=>s.hotelId===h.id).length} سجل · اضغط على المنطقة لتعديلها</small><div class="zone-chips">${h.zones.map(z=>`<button class="zone-chip zc" data-h="${h.id}" data-z="${esc(z)}">${esc(z)} ✎</button>`).join('')}</div></div><div style="display:grid;gap:6px;align-content:start"><button class="small-btn h-edit" data-h="${h.id}">تعديل</button><button class="small-btn h-del" data-h="${h.id}" style="color:#b3261e">حذف</button></div></div>`).join('')}
 function navigate(v){$$('.view').forEach(x=>x.classList.toggle('active',x.id===`view-${v}`));$$('.nav-link').forEach(x=>x.classList.toggle('active',x.dataset.view===v));$('#pageTitle').textContent=({dashboard:'لوحة التحكم',signs:'سجل اليافطات',hotels:'الفنادق والمناطق',reports:'التقارير والنسخ الاحتياطي',survey:'المعاينة الميدانية',design:'التصميم والاعتمادات',make:'التصنيع والجودة',install:'التركيب والتسليم',settings:'الإعدادات'})[v];if(DRAW[v]&&dirty.has(v)){DRAW[v]();dirty.delete(v)}if(v==='survey')fillSurvey();if(v==='reports')drawStorage();if(v==='settings'){drawStorage();drawPin()}$('#sidebar').classList.remove('open');syncTabs(v);document.querySelectorAll('.coach-pulse').forEach(x=>x.classList.remove('coach-pulse'));drawCoach();if(v==='signs')drawSigns()}
-function openModal(s=null){if(!s&&!(currentHotel()?.zones?.length)){toast('أضف منطقة للفندق أولاً من صفحة الفنادق');navigate('hotels');setTimeout(()=>pulse('#zoneForm button[type=submit]'),350);return}editing=s?.id||null;const f=$('#signForm');f.reset();$('#modalTitle').textContent=s?'تعديل بيانات اليافطة':'تسجيل يافطة جديدة';hydrate();catInit(s);if(s){Object.entries(s).forEach(([k,v])=>{if(f.elements[k]&& !['photo','afterPhoto','issuePhoto'].includes(k))f.elements[k].value=v??''});$('#formHotel').value=s.hotelId;updateZones();$('#formZone').value=s.zone} else {const h=currentHotel();if(h)$('#formHotel').value=h.id;updateZones();f.elements.surveyDate.value=new Date().toISOString().slice(0,10);f.elements.status.value='مسودة'}$('#signModal').classList.add('open')}
+function openModal(s=null){if(!s&&!(currentHotel()?.zones?.length)){toast('أضف منطقة للفندق أولاً من صفحة الفنادق');navigate('hotels');setTimeout(()=>pulse('#zoneForm button[type=submit]'),350);return}editing=s?.id||null;const f=$('#signForm');f.reset();$('#modalTitle').textContent=s?'تعديل بيانات اليافطة':'تسجيل يافطة جديدة';hydrate();catInit(s);if(s){Object.entries(s).forEach(([k,v])=>{if(f.elements[k]&& !['photo','afterPhoto','issuePhoto'].includes(k))f.elements[k].value=v??''});$('#formHotel').value=s.hotelId;updateZones();$('#formZone').value=s.zone} else {const h=currentHotel();if(h)$('#formHotel').value=h.id;updateZones();f.elements.surveyDate.value=new Date().toISOString().slice(0,10);f.elements.status.value='مسودة'}$('#signModal').classList.add('open');goStep(1)}
 function closeModal(){$('#signModal').classList.remove('open')}
+/* ===== تحديث 13+14: خطوات النموذج + المعاينة ===== */
+let curStep=1;
+function goStep(n){
+  curStep=Math.max(1,Math.min(3,n));
+  $$('#signForm .spnl').forEach(p=>p.classList.toggle('on',+p.dataset.s===curStep));
+  $$('#signForm .sbtn').forEach(b=>{
+    const s=+b.dataset.s;
+    b.classList.toggle('on',s===curStep);
+    b.classList.toggle('done',s<curStep);
+  });
+  $('#sPrev').disabled=curStep===1;
+  $('#sNext').style.display=curStep===3?'none':'';
+  $('#sSubmit').style.display=curStep===3?'':'none';
+  const m=$('#signModal .modal');if(m)m.scrollTop=0;
+  updSpv();
+}
+function updSpv(){
+  const f=$('#signForm');if(!f||!f.elements||!f.elements.category)return;
+  const h=data.hotels.find(x=>x.id===(f.elements.hotelId?.value||''));
+  const zone=f.elements.zone?.value||'';
+  const prefix=(h?.code||'HTL').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5);
+  const z=(zone||'GEN').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,3)||'GEN';
+  const cur=editing?data.signs.find(s=>s.id===editing):null;
+  const code=cur?.code||`${prefix}-${z}-###`;
+  $('#spvCode').textContent=code;
+  $('#spvLine').textContent=`${f.elements.width.value||'—'} × ${f.elements.height.value||'—'} سم · كمية ${f.elements.quantity.value||1}`;
+  const pr=f.elements.priority.value||'C';
+  const prEl=$('#spvPr');
+  prEl.textContent=pr;
+  prEl.className='pill '+(pr.startsWith('A')?'critical':'s'+(pr.startsWith('B')?4:pr.startsWith('C')?6:1));
+  const im=$('#spvImg');
+  const file=f.elements.photo?.files?.[0];
+  if(file){
+    if(im._url)URL.revokeObjectURL(im._url);
+    im._url=URL.createObjectURL(file);
+    im.innerHTML=`<img src="${im._url}" alt="">`;
+  } else if(cur?.photo){
+    im.innerHTML=`<img src="${cur.photo}" alt="">`;
+  } else {
+    im.textContent='▤';
+  }
+}
+$('#sbar').addEventListener('click',e=>{const b=e.target.closest('.sbtn');if(b)goStep(+b.dataset.s)});
+$('#sPrev').onclick=()=>goStep(curStep-1);
+$('#sNext').onclick=()=>goStep(curStep+1);
+$('#signForm').addEventListener('input',updSpv,true);
+$('#signForm').addEventListener('change',updSpv,true);
+$('#signForm').addEventListener('invalid',e=>{
+  const step=e.target.closest('.spnl')?.dataset.s;
+  if(step&&+step!==curStep){goStep(+step);toast('أكمل الحقول المطلوبة');}
+},true);
 $('#signForm').addEventListener('submit',async e=>{e.preventDefault();const f=e.currentTarget;if(!prepSign(f))return;const o=Object.fromEntries(new FormData(f).entries());const old=data.signs.find(s=>s.id===editing);const photo= f.elements.photo.files[0]?await resizeImage(f.elements.photo.files[0]):'';const afterPhoto=f.elements.afterPhoto.files[0]?await resizeImage(f.elements.afterPhoto.files[0]):'';const issuePhoto=f.elements.issuePhoto.files[0]?await resizeImage(f.elements.issuePhoto.files[0]):'';delete o.photo;delete o.afterPhoto;delete o.issuePhoto;if(!editing&&$('#bulkOn').checked){const nums=bulkNums();if(!nums.length)return toast('حدد نطاق أرقام صحيح');if(nums.length>300)return toast('الحد الأقصى 300 يافطة في المرة');if(nums.length>20&&!confirm(`إنشاء ${nums.length} يافطة؟`))return;const made=[],now=new Date().toISOString();nums.forEach((n,i)=>{const x={...o,id:db.uid(),location:`${$('#bkPrefix').value}${n}`,code:db.code(data,o.hotelId,o.zone),quantity:1,width:Number(o.width||0),height:Number(o.height||0),latitude:o.latitude||'',longitude:o.longitude||'',photo:i?'':photo,afterPhoto:'',issuePhoto:i?'':issuePhoto,roomNo:n,createdAt:now,updatedAt:now};data.signs.unshift(x);made.push(x)});const ids=new Set(made.map(x=>x.id));data.signs=[...made,...data.signs.filter(x=>!ids.has(x.id))];db.log(data,'إضافة يافطات بالجملة',`${nums.length} × ${o.type}`);try{save();closeModal();toast(`تم إنشاء ${nums.length} يافطة`)}catch{toast('مساحة التخزين غير كافية')}return}const s={...(old||{}),...o,id:editing||db.uid(),code:old?.code||db.code(data,o.hotelId,o.zone),quantity:Math.max(1,Number(o.quantity||1)),width:Number(o.width||0),height:Number(o.height||0),latitude:o.latitude||old?.latitude||'',longitude:o.longitude||old?.longitude||'',photo:photo||old?.photo||'',afterPhoto:afterPhoto||old?.afterPhoto||'',issuePhoto:issuePhoto||old?.issuePhoto||'',createdAt:old?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};if(editing)data.signs=data.signs.map(x=>x.id===editing?s:x);else data.signs.unshift(s);db.log(data,editing?'تعديل يافطة':'إضافة يافطة',s.code);try{save();closeModal();toast('تم حفظ بيانات اليافطة')}catch(err){toast('مساحة التخزين غير كافية؛ صدّر نسخة احتياطية واحذف صورًا كبيرة')}});
 function resizeImage(file){return new Promise(resolve=>{const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{const MAX=800,scale=Math.min(1,MAX/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(img.width*scale));c.height=Math.max(1,Math.round(img.height*scale));c.getContext('2d').drawImage(img,0,0,c.width,c.height);resolve(c.toDataURL('image/jpeg',.55))};img.onerror=()=>resolve('');img.src=r.result};r.onerror=()=>resolve('');r.readAsDataURL(file)})}
 $('#hotelForm').addEventListener('submit',e=>{e.preventDefault();const o=Object.fromEntries(new FormData(e.currentTarget));if(data.hotels.some(h=>h.code.toLowerCase()===o.code.toLowerCase()))return toast('كود الفندق مستخدم بالفعل');const nid=db.uid();data.hotels.push({id:nid,name:o.name,code:o.code.toUpperCase(),opening:o.opening,zones:['Entrance','Lobby','Corridor','F&B','BOH']});db.log(data,'إضافة فندق',o.name);e.currentTarget.reset();(data.settings=data.settings||{}).currentHotelId=nid;save();$('#hotelSwitch').value=nid;$('#hotelSwitch').dispatchEvent(new Event('change'));toast('تم إضافة الفندق')});
@@ -424,7 +655,7 @@ function fillCat(sel,type){const c=catList();if(sel&&!c.some(x=>x.v===sel))c.pus
 function fillType(cat,type){const t=cat&&cat!=='__new'?typeList(cat):[];if(type&&!t.some(x=>x.v===type))t.push({v:type,l:type});$('#formType').innerHTML=optH(t,cat?'اختر النوع الفرعي':'اختر التصنيف أولاً','＋ نوع جديد...');showNew()}
 function showNew(){$('#newCat').style.display=$('#formCat').value==='__new'?'':'none';$('#newType').style.display=$('#formType').value==='__new'?'':'none'}
 function catInit(s){fillCat(s?.category,s?.type);$('#bulkSec').style.display=s?'none':'';$('#bulkOn').checked=false;bulkToggle()}
-$('#formCat').onchange=()=>{const c=$('#formCat').value;fillType(c);if(c==='__new')$('#formType').value='__new';showNew()};$('#formType').onchange=showNew;
+$('#formCat').onchange=()=>{const c=$('#formCat').value;fillType(c);if(c==='__new')$('#formType').value='__new';showNew();updSpv()};$('#formType').onchange=showNew;
 function prepSign(){data.custom=data.custom||{cats:[],types:{}};const cs=$('#formCat'),ts=$('#formType');let c=cs.value,t=ts.value;
 if(c==='__new'){c=$('#newCat').value.trim();if(!c){toast('اكتب اسم التصنيف الجديد');return false}if(!catList().some(x=>x.v===c))data.custom.cats.push(c);cs.insertAdjacentHTML('beforeend',`<option value="${esc(c)}">${esc(c)}</option>`);cs.value=c}
 if(t==='__new'){t=$('#newType').value.trim();if(!t){toast('اكتب اسم النوع الجديد');return false}if(!typeList(c).some(x=>x.v===t))(data.custom.types[c]=data.custom.types[c]||[]).push(t);ts.insertAdjacentHTML('beforeend',`<option value="${esc(t)}">${esc(t)}</option>`);ts.value=t}
@@ -483,7 +714,58 @@ const stageViews=['survey','design','make','install'];
 function syncTabs(v){$$('#tabs [data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t===v||(b.dataset.t==='stages'&&stageViews.includes(v))))}
 $$('#tabs [data-t]').forEach(b=>b.onclick=()=>{if(b.dataset.t==='stages')$('#stageSheet').classList.add('open');else navigate(b.dataset.t)});
 $('#tabAdd').onclick=()=>openModal();$('#tabMore').onclick=()=>$('#sidebar').classList.toggle('open');
-$('#stageSheet').addEventListener('click',e=>{if(e.target.closest('[data-pg]')||e.target.id==='stageSheet')$('#stageSheet').classList.remove('open')});
+/* ===== تحديث 7: Bottom Sheet — سحب للإغلاق ===== */
+(function(){
+  const sheet=$('#stageSheet');
+  if(!sheet)return;
+  const modal=sheet.querySelector('.modal');
+  let startY=0,curY=0,dragging=false;
+  const closeSheet=()=>{
+    modal.classList.add('closing');
+    setTimeout(()=>{
+      sheet.classList.remove('open');
+      modal.classList.remove('closing','sh');
+      modal.style.removeProperty('--sh');
+    },250);
+  };
+  const onDown=e=>{
+    if(!sheet.classList.contains('open'))return;
+    const t=e.touches?e.touches[0]:e;
+    if(t.target.closest('.pipe')||t.target.closest('button'))return;
+    startY=curY=t.clientY;
+    dragging=true;
+    modal.classList.add('sh');
+    modal.style.transition='none';
+  };
+  const onMove=e=>{
+    if(!dragging)return;
+    const t=e.touches?e.touches[0]:e;
+    curY=t.clientY;
+    const dy=Math.max(0,curY-startY);
+    modal.style.setProperty('--sh',dy+'px');
+    if(e.cancelable)e.preventDefault();
+  };
+  const onUp=()=>{
+    if(!dragging)return;
+    dragging=false;
+    modal.style.transition='';
+    const dy=curY-startY;
+    if(dy>80){closeSheet()}
+    else{modal.style.setProperty('--sh','0px');setTimeout(()=>modal.classList.remove('sh'),250)}
+  };
+  modal.addEventListener('touchstart',onDown,{passive:true});
+  modal.addEventListener('touchmove',onMove,{passive:false});
+  modal.addEventListener('touchend',onUp);
+  modal.addEventListener('touchcancel',onUp);
+  modal._closeSheet=closeSheet;
+})();
+$('#stageSheet').addEventListener('click',e=>{
+  const m=$('#stageSheet').querySelector('.modal');
+  if(e.target.closest('[data-pg]')||e.target.id==='stageSheet'){
+    if(m?._closeSheet)m._closeSheet();
+    else $('#stageSheet').classList.remove('open');
+  }
+});
 document.addEventListener('click',e=>{const b=e.target.closest('.pipe');if(b)navigate(b.dataset.pg)});
 function stageOf(s){const g=SG[s.status]||1;return g===1?0:g<=3?1:g===4?2:g===5?3:g===6?(s.status==='تم التسليم'?4:3):(s.inst?.defects?.length?3:2)}
 function drawPipe(){
