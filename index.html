@@ -423,7 +423,7 @@ function render(){
   const qty=k=>signs.filter(s=>k(s)).reduce((a,s)=>a+Number(s.quantity||1),0);
   const cards=[
     {l:'إجمالي الكميات',v:qty(()=>true),f:'كل اليافطات',i:'🪧',c:'#eff8e6',tc:'#548d12'},
-    {l:'تم الحصر',v:qty(s=>s.status==='تم الحصر'),f:'نقاط تم توثيقها',i:'✓',c:'#e3f0ff',tc:'#1565c0'},
+    {l:'مُسجَّلة',v:qty(s=>['مسودة','تم الحصر'].includes(s.status)),f:'نقاط تم توثيقها',i:'✓',c:'#e3f0ff',tc:'#1565c0'},
     {l:'قيد التصنيع',v:qty(s=>s.status==='قيد التصنيع'),f:'داخل المصنع',i:'⚙',c:'#fff3e0',tc:'#e65100'},
     {l:'تم التركيب',v:instSum(),f:'منفذ بالموقع',i:'⚑',c:'#e0f4f1',tc:'#00796b'}
   ];
@@ -435,8 +435,22 @@ function empty(title,msg){return `<div class="empty"><b>${title}</b>${msg}</div>
 function card(s){const h=data.hotels.find(x=>x.id===s.hotelId);return `<article class="sign-card"><div class="sign-thumb">${s.photo?`<img class="sign-thumb" src="${s.photo}" loading="lazy" decoding="async" alt="صورة اليافطة">`:'▤'}</div><div class="sign-info"><div class="sign-top"><span class="sign-id">${esc(s.code)}</span><span class="${statusClass(s.status)}">${esc(s.status)}</span><span class="pill ${s.priority?.startsWith('A')?'critical':''}">${esc(s.priority||'C')}</span></div><div class="sign-title">${esc(s.type)} — ${esc(s.location)}</div><div class="sign-meta">${esc(s.zone)} · ${s.width||'—'} × ${s.height||'—'} سم · كمية ${s.quantity||1}</div><div class="sign-actions"><button class="small-btn" data-qr="${s.id}">QR</button><button class="small-btn" data-edit="${s.id}">تعديل</button><button class="small-btn" data-delete="${s.id}">حذف</button></div></div></article>`}
 function drawSigns(){const h=currentHotel(),q=$('#searchInput').value.toLowerCase(),zone=$('#zoneFilter').value,st=$('#statusFilter').value,pr=$('#priorityFilter').value;let list=data.signs.filter(s=>(!h||s.hotelId===h.id)&&(!q||[s.code,s.location,s.type,s.category,s.zone].some(v=>String(v||'').toLowerCase().includes(q)))&&(!zone||s.zone===zone)&&(!st||s.status===st)&&(!pr||s.priority===pr));const key=[q,zone,st,pr,h?.id].join('|');if(key!==sKey){sKey=key;sLim=40}$('#signList').innerHTML=list.length?`<div class="sign-meta" style="margin:0 2px 8px">${list.length} يافطة</div>`+list.slice(0,sLim).map(card).join('')+(list.length>sLim?`<button class="secondary" id="sMore" style="width:100%;min-height:48px">عرض المزيد (${list.length-sLim})</button>`:''):empty('مفيش نتائج مطابقة','جرّب تغيير البحث أو الفلاتر.')}
 function drawHotels(){$('#hotelList').innerHTML=data.hotels.map(h=>`<div class="hotel-item"><div style="flex:1"><b>${esc(h.name)}</b><small>كود: ${esc(h.code)} · ${data.signs.filter(s=>s.hotelId===h.id).length} سجل · اضغط على المنطقة لتعديلها</small><div class="zone-chips">${h.zones.map(z=>`<button class="zone-chip zc" data-h="${h.id}" data-z="${esc(z)}">${esc(z)} ✎</button>`).join('')}</div></div><div style="display:grid;gap:6px;align-content:start"><button class="small-btn h-edit" data-h="${h.id}">تعديل</button><button class="small-btn h-del" data-h="${h.id}" style="color:#b3261e">حذف</button></div></div>`).join('')}
-function navigate(v){$$('.view').forEach(x=>x.classList.toggle('active',x.id===`view-${v}`));$$('.nav-link').forEach(x=>x.classList.toggle('active',x.dataset.view===v));$('#pageTitle').textContent=({dashboard:'لوحة التحكم',signs:'سجل اليافطات',hotels:'الفنادق والمناطق',reports:'التقارير والنسخ الاحتياطي',survey:'المعاينة الميدانية',design:'التصميم والاعتمادات',make:'التصنيع والجودة',install:'التركيب والتسليم',settings:'الإعدادات'})[v];if(DRAW[v]&&dirty.has(v)){DRAW[v]();dirty.delete(v)}if(v==='survey')fillSurvey();if(v==='reports')drawStorage();if(v==='settings'){drawStorage();drawPin()}$('#sidebar').classList.remove('open');syncTabs(v);document.querySelectorAll('.coach-pulse').forEach(x=>x.classList.remove('coach-pulse'));drawCoach();if(v==='signs')drawSigns()}
-function openModal(s=null){if(!s&&!(currentHotel()?.zones?.length)){toast('أضف منطقة للفندق أولاً من صفحة الفنادق');navigate('hotels');setTimeout(()=>pulse('#zoneForm button[type=submit]'),350);return}editing=s?.id||null;const f=$('#signForm');f.reset();$('#modalTitle').textContent=s?'تعديل بيانات اليافطة':'تسجيل يافطة جديدة';hydrate();catInit(s);if(s){Object.entries(s).forEach(([k,v])=>{if(f.elements[k]&& !['photo','afterPhoto','issuePhoto'].includes(k))f.elements[k].value=v??''});$('#formHotel').value=s.hotelId;updateZones();$('#formZone').value=s.zone} else {const h=currentHotel();if(h)$('#formHotel').value=h.id;updateZones();f.elements.surveyDate.value=new Date().toISOString().slice(0,10);f.elements.status.value='مسودة'}$('#signModal').classList.add('open');goStep(1)}
+function navigate(v){
+  $$('.view').forEach(x=>x.classList.toggle('active',x.id===`view-${v}`));
+  window.scrollTo({top:0,behavior:'instant'});
+  $$('.nav-link').forEach(x=>x.classList.toggle('active',x.dataset.view===v));
+  $('#pageTitle').textContent=({dashboard:'لوحة التحكم',signs:'سجل اليافطات',hotels:'الفنادق والمناطق',reports:'التقارير والنسخ الاحتياطي',survey:'المعاينة الميدانية',design:'التصميم والاعتمادات',make:'التصنيع والجودة',install:'التركيب والتسليم',settings:'الإعدادات'})[v];
+  if(DRAW[v]&&dirty.has(v)){DRAW[v]();dirty.delete(v)}
+  if(v==='survey')fillSurvey();
+  if(v==='reports')drawStorage();
+  if(v==='settings'){drawStorage();drawPin()}
+  $('#sidebar').classList.remove('open');
+  syncTabs(v);
+  document.querySelectorAll('.coach-pulse').forEach(x=>x.classList.remove('coach-pulse'));
+  drawCoach();
+  if(v==='signs')drawSigns();
+}
+function openModal(s=null){if(!s&&!(currentHotel()?.zones?.length)){toast('أضف منطقة للفندق أولاً من صفحة الفنادق');navigate('hotels');setTimeout(()=>pulse('#zoneForm button[type=submit]'),350);return}editing=s?.id||null;const f=$('#signForm');f.reset();$('#modalTitle').textContent=s?'تعديل بيانات اليافطة':'تسجيل يافطة جديدة';hydrate();catInit(s);if(s){Object.entries(s).forEach(([k,v])=>{if(f.elements[k]&& !['photo','afterPhoto','issuePhoto'].includes(k))f.elements[k].value=v??''});$('#formHotel').value=s.hotelId;updateZones();$('#formZone').value=s.zone} else {const h=currentHotel();if(h)$('#formHotel').value=h.id;updateZones();f.elements.surveyDate.value=new Date().toISOString().slice(0,10);f.elements.status.value='تم الحصر'}$('#signModal').classList.add('open');goStep(1)}
 function closeModal(){$('#signModal').classList.remove('open')}
 let curStep=1;
 function goStep(n){
